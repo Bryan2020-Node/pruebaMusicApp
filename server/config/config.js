@@ -30,7 +30,7 @@ process.env.CADUCIDAD_TOKEN = 60 * 60 * 24 * 30;
 //      Base de Datos
 //================================================
 
-let urlDB = 'mongodb+srv://strider:xtU2ZuZnqRA8q0nq@cluster0.15wnd.mongodb.net/musicaApp';
+let urlDB = process.env.MONGO_URI
 
 // if (proces.env.NODE_ENV === 'dev') {
 //     urlDB = 'mongodb://localhost:27017/musicaApp';

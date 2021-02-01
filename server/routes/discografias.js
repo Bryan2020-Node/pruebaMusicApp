@@ -132,6 +132,43 @@ app.get('/filtrarDiscografias', (req, res) => {
 });
 
 
+//================================================
+//      Filtrar Discos Por Artista
+//================================================
+app.get('/filtrarDiscoArtista', (req, res) => {
+    let search = req.query.search;
+    let regex = new RegExp(search, 'i');
+    Disco.find({ idartista: regex }, 'nombre_disco anio urlPortada')
+        .sort('nombre_disco')
+        // .populate('idartista', 'nombre_artista')
+        .exec((err, discoDB) => {
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    error: {
+                        message: err
+                    }
+                });
+            }
+
+            if (discoDB.length === 0) {
+                return res.status(400).json({
+                    ok: false,
+                    items: discoDB.length,
+                    error: {
+                        message: 'Sin resultados'
+                    }
+                });
+            }
+
+            res.json({
+                ok: true,
+                items: discoDB.length,
+                results: discoDB
+            });
+        });
+});
+
 
 
 module.exports = app;

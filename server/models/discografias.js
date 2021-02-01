@@ -10,6 +10,12 @@ let discografiaSchema = new Schema({
         unique: true
     },
     idartista: {
+        // type: Schema.Types.ObjectId,
+        type: String,
+        required: true,
+        // ref: 'Artista'
+    },
+    artista: {
         type: Schema.Types.ObjectId,
         required: true,
         ref: 'Artista'

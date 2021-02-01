@@ -64,7 +64,7 @@ app.get('/listaDiscografias', (req, res) => {
 
     Disco.find({}, 'nombre_disco anio urlPortada')
         .sort('nombre_disco')
-        .populate('idartista', 'nombre_artista')
+        .populate('artista', 'nombre_artista')
         .exec((err, discoDB) => {
             if (err) {
                 return res.status(400).json({
@@ -102,7 +102,7 @@ app.get('/filtrarDiscografias', (req, res) => {
     let regex = new RegExp(search, 'i');
     Disco.find({ nombre_disco: regex }, 'nombre_disco anio urlPortada')
         .sort('nombre_disco')
-        .populate('idartista', 'nombre_artista')
+        .populate('artista', 'nombre_artista')
         .exec((err, discoDB) => {
             if (err) {
                 return res.status(400).json({
@@ -135,12 +135,12 @@ app.get('/filtrarDiscografias', (req, res) => {
 //================================================
 //      Filtrar Discos Por Artista
 //================================================
-app.get('/filtrarDiscoArtista', (req, res) => {
-    let search = req.query.search;
-    let regex = new RegExp(search, 'i');
-    Disco.find({ idartista: regex }, 'nombre_disco anio urlPortada')
+app.get('/filtrarDiscoArtista/:id', (req, res) => {
+    let id = req.params.id;
+    // let regex = new RegExp(search, 'i');
+    Disco.find({ idartista: id }, 'urlPortada nombre_disco idartista anio')
         .sort('nombre_disco')
-        // .populate('idartista', 'nombre_artista')
+        .populate('artista', 'nombre_artista')
         .exec((err, discoDB) => {
             if (err) {
                 return res.status(400).json({

@@ -26,7 +26,8 @@ app.post('/nuevoDisco', (req, res) => {
         nombre_disco: body.nombre_disco,
         idartista: body.idartista,
         anio: body.anio,
-        urlPortada: body.urlPortada
+        urlPortada: body.urlPortada,
+        artista: body.idartista
     });
 
     disco.save((err, discoDB) => {

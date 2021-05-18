@@ -10,6 +10,8 @@ const cors = require('cors');
 //cors para acceder a la api desde cualquier pagina
 app.use(cors());
 
+app.use(express.static(__dirname + '/public'));
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 

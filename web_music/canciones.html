@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alta Canciones</title>
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/mdb.min.css">
+<script>var title;</script>
+    <!-- QR -->
+    <script type="text/javascript" src="assets/js/qrcode.js"></script>
+
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/popper.min.js"></script>
+    <script src="assets/js/mdb.min.js"></script>
+    <script src="canciones.js"></script>
+    <link href="style.css" rel="stylesheet"> <!--load all styles -->
+	<link href="fontawesome/css/all.css" rel="stylesheet"> <!--load all styles -->
+	<script defer src="fontawesome/js/all.js"></script> <!--load all styles -->
+    <script type="text/javascript" src="script.js"></script>
+</head>
+
+<body>
+    <br>
+    <div class="container body-content">
+        <form>
+            <!--Inicio Grupo de datos-->
+            <div class="card">
+                <div class="card-header light-blue white-text">
+                    <h5 class="panel-title">Registro de Canciones</h5>
+                </div>
+
+                <div class="card-body">
+                    <div class="form-row">
+
+                        <div class="form-group col-md-12">
+                            
+                            <table id="tblCanciones">
+                                <tr>
+                                    <td style="width: 130px;">Portada</td>
+                                    <td style="width: 250px;">Título</td>
+                                    <td style="width: 250px;">Disco</td>
+                                    <td style="width: 100;">Artista</td>
+                                    <td style="width: 100; display: none;">Url</td>
+                                    
+                                </tr>
+                            </table>
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+
+    <!-- Central Modal Medium Success -->
+    <div class="modal fade" id="modalPlaySong" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-notify modal-success modal-lg" role="document">
+            <!--Content-->
+            <div class="modal-content">
+                <!--Header-->
+                <div class="modal-header blue">
+                    <p class="heading lead">Reproductor de Música</p>
+
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true" class="white-text">&times;</span>
+
+           </button>
+                </div>
+
+                <!--Body-->
+                <div class="modal-body">
+                    <div class="text-center">
+
+                        <audio id="player" ontimeupdate="updateProgress();">
+                            <source  id="source">	
+                            Audio no soportado	
+                        </audio>
+                        
+                        <div id="controls">
+                            <div class="timer" id="timer">
+                                &nbsp;
+                            </div>
+                            <div class="volumen">
+                                Vol: 
+                                <i class="fas fa-volume-down"></i> 
+                                <input type="range" name="volumen" id="volumen" min="0" max="1" step="0.01" value="0.75"> 
+                                <i class="fas fa-volume-up"></i>
+                            </div>
+                            
+                            <i class="fas fa-backward fa-5x" onclick="prevMusic();"></i>
+                            <i class="far fa-play-circle fa-5x" onclick="togglePlay();" id="iconPlay"></i> 
+                            <i class="fas fa-forward fa-5x" onclick="nextMusic();"></i>
+                            <br>
+                            <span id="currentPlay"></span><br>
+                            <progress id="progress" value="0" max="100" ></progress>
+                            
+                            
+                            
+                            
+                            <h3>Mi música</h3>
+                            <div style="display: none;" id="playList"></div>
+                    
+                        
+                        
+                        
+                        </div>
+                        </div>
+                        
+                        
+                    </div>
+                </div>
+
+            </div>
+            <!--/.Content-->
+        </div>
+    </div>
+    <!-- Central Modal Medium Success-->
+    
+
+    <script>
+        //cargar dropdowns
+        $(document).ready(function() {
+            cargaCanciones();
+        });
+        
+        var title = 'asd';
+        
+        var songUrl = "";
+        var urlCancion = "";
+        var canciones = ["https://res.cloudinary.com/ddnukfodk/video/upload/v1612228004/musicAPP/songs/zz2knheaydpq9xu1xfcc.mp3"];
+
+        var cabezera = new Headers();
+        cabezera.append('Accept', 'application/json');
+        cabezera.append('Access-Control-Allow-Origin', '*');
+
+        
+
+
+
+        
+
+
+
+
+    
+var indiceActual = new Array(1);
+    //Funcion para crear mediante javascript el listado de canciones
+    function crearPlayList(){
+        const listado = document.createElement('ol');
+        listado.setAttribute("id", 'listadoMusica');
+        for (let i = 0; i<canciones.length; i++){
+            const item = document.createElement('li');
+            item.appendChild(document.createTextNode(canciones[i])) ;
+            item.setAttribute("id", canciones.indexOf(canciones[i]));
+            listado.appendChild(item);
+        }
+        return listado;
+    }
+
+    document.getElementById('playList').appendChild(crearPlayList());
+    
+    var listadoMusica= document.getElementById('listadoMusica')
+    listadoMusica.onclick = (e) =>{
+        const itemClick = e.target
+        removeActive()
+        itemClick.classList.add("active");
+        reproduccionActual("Reproduciendo: "+ itemClick.innerText)
+        loadMusic(itemClick.innerText)
+        player.play()
+        indiceActual[0]= e.target.id
+        classIconPlay();
+    
+    }
+    
+    //Funcion para cambiar el icono del reprodutor
+    function classIconPlay(){
+        var element = document.getElementById("iconPlay")
+        element.classList.remove("fa-pause-circle");
+        element.classList.add("fa-play-circle");
+    }
+    //Funcion para control del volumen
+    const volumen= document.getElementById("volumen")
+    volumen.oninput= (e) =>{
+        const vol = e.target.value
+        player.volume =vol
+    }
+    //Funcion para actualizar la barra de progreso del reprodutor
+    const updateProgress = () =>{
+        if (player.currentTime >0){
+            const barra = document.getElementById('progress')
+            barra.value = (player.currentTime / player.duration) * 100
+            
+            var duracionSegundos= player.duration.toFixed(0);
+            dura=secondsToString(duracionSegundos);
+            var actualSegundos = player.currentTime.toFixed(0)
+            actual=secondsToString(actualSegundos);
+            
+            duracion= actual +' / '+ dura
+            document.getElementById('timer').innerText=duracion 
+        }
+        if (player.ended){
+            nextMusic();//Reproducir la siguiente pista
+        } 
+    }
+    //Funcion para reproducir la proxima cancion
+    function nextMusic(){  
+        const source = document.getElementById('source');
+        var musicaActual= Number(indiceActual[0]);
+        if (canciones.length == (musicaActual+1)){
+            var siguiente = 0
+        } else {
+            var siguiente = musicaActual + 1
+        }
+        removeActive()
+        var item=document.getElementById(siguiente)
+        item.classList.add("active");
+        loadMusic(canciones[siguiente]);
+        player.play()
+        indiceActual[0]= siguiente
+        reproduccionActual("Reproduciendo: "+ canciones[siguiente])
+        classIconPlay()
+    }
+    //Funcion para reproducir la cancion anterior
+    function prevMusic(){  
+        const source = document.getElementById('source');
+        var musicaActual= Number(indiceActual[0]);
+        if (musicaActual==0){
+            var anterior= canciones.length - 1
+        } else {
+            var anterior = musicaActual - 1
+        }
+        removeActive()
+        var item=document.getElementById(anterior)
+        item.classList.add("active");
+        loadMusic(canciones[anterior]);
+        player.play()
+        indiceActual[0]= anterior
+        reproduccionActual("Reproduciendo: "+ canciones[anterior])
+        classIconPlay()
+    }
+    //Funcion para remover todas las clases css activas
+    function removeActive(){
+        var elems = document.querySelectorAll(".active");
+          [].forEach.call(elems, function(el) {
+            el.classList.remove("active");
+          });
+          return elems
+    }
+    //Funcion para mostrar el nombre del arhivo actual en reproduccion
+    function reproduccionActual(texto){
+        document.getElementById('currentPlay').innerText=texto
+    }
+    //Funcion para cargar las canciones en el reproductor
+    function loadMusic(ruta){
+        var source = document.getElementById('source');
+        var folder ="audio";//Carpeta donde tenemos almancenada la musica
+        // source.src= folder+"/"+ruta
+        // source.src= "https://res.cloudinary.com/ddnukfodk/video/upload/v1613076584/musicAPP/songs/dv08addnlurlbrac1zmd.mp3"
+        source.src= ruta;
+        var index= indiceActual[0]= canciones.indexOf(ruta);
+        removeActive();
+        var item=document.getElementById(index);
+        item.classList.add("active");
+        reproduccionActual("Reproduciendo: "+ title);
+        player.load();
+    }
+    //Funcion para pausar o darle play 
+    function togglePlay() {
+        if (player.paused){
+            toggleIcon();
+            return player.play();
+        } else {
+            toggleIcon();
+            return player.pause();
+        }
+    }
+    //Funcion para cambiar el icono play o pause
+    function toggleIcon() {
+        var element = document.getElementById("iconPlay");
+       element.classList.toggle("fa-pause-circle");
+       element.classList.toggle("fa-play-circle");
+    }
+    //Funcion para que al dar click sobre la barra de progeso se permita adelantar
+    progress.addEventListener('click', adelantar);
+    function adelantar(e){
+        const scrubTime = (e.offsetX / progress.offsetWidth) * player.duration;
+        player.currentTime = scrubTime;
+        console.log(e);
+    }
+    //Funcion para convertir segundos a minutos y horas
+    function secondsToString(seconds) {
+        var hour="";
+        if (seconds>3600){
+            hour = Math.floor(seconds / 3600);
+            hour = (hour < 10)? '0' + hour : hour;
+            hour+=":"
+        }
+       var minute = Math.floor((seconds / 60) % 60);
+      minute = (minute < 10)? '0' + minute : minute;
+      var second = seconds % 60;
+      second = (second < 10)? '0' + second : second;
+      return hour  + minute + ':' + second;
+    }
+
+    // loadMusic(canciones[0]);  
+    </script>
+</body>
+
+</html>

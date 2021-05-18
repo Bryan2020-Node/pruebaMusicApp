@@ -31,6 +31,7 @@ process.env.CADUCIDAD_TOKEN = 60 * 60 * 24 * 30;
 //================================================
 
 let urlDB = process.env.MONGO_URI
+// let urlDB = 'mongodb://localhost:27017/musicaApp';
     // let urlDB;
 
 // if (process.env.NODE_ENV === 'dev') {

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alta Canciones</title>
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/mdb.min.css">
+
+    <!-- QR -->
+    <script type="text/javascript" src="assets/js/qrcode.js"></script>
+
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/popper.min.js"></script>
+    <script src="assets/js/mdb.min.js"></script>
+    <script src="funciones.js"></script>
+    <script src="eventosfuncion.js"></script>
+    <script src="artistas.js"></script>
+    <script src="discos.js"></script>
+    <script src="songs.js"></script>
+</head>
+
+<body>
+    <br>
+    <div class="container body-content">
+        <form>
+            <!--Inicio Grupo de datos-->
+            <div class="card">
+                <div class="card-header light-blue white-text">
+                    <h5 class="panel-title">Registro de Canciones</h5>
+                </div>
+
+                <div class="card-body">
+                    <div class="form-row">
+
+                        <div class="form-group col-md-2">
+                            <button type="button" id="btnGeneros" class="btn btn-amber">Generos</button>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <button type="button" id="btnArtistas" class="btn btn-light-green">Artistas</button>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <button type="button" id="btnDiscos" class="btn btn-blue">Discos</button>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <a href="canciones.html" id="btnCanciones" class="btn btn-red">Canciones</a>
+                        </div>
+                    </div>
+                    <br><br>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="txtTitulo">Título:</label>
+                            <input type="text" class="form-control" id="txtTitulo" name="txtTitulo" value="" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="txtUrlSong">Url Canción:</label>
+                            <input type="text" class="form-control" id="txtUrlSong" name="txtUrlSong" value="" />
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="dropArtistas">Artista:</label>
+                            <select name="dropArtistas" id="dropArtistas" class="form-control">
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="dropDiscos">Discografía:</label>
+                            <select name="dropDiscos" id="dropDiscos" class="form-control">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <button type="button" class="btn btn-cyan" id="btnRegistrarCancion">Registrar</button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+
+
+    <!-- Central Modal Medium Success -->
+    <div class="modal fade" id="modalGeneros" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-notify modal-success modal-lg" role="document">
+            <!--Content-->
+            <div class="modal-content">
+                <!--Header-->
+                <div class="modal-header blue">
+                    <p class="heading lead">Alta de Generos Musicales</p>
+
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true" class="white-text">&times;</span>
+
+           </button>
+                </div>
+
+                <!--Body-->
+                <div class="modal-body">
+                    <div class="text-center">
+
+                        <p>
+                            <label for="txtNombreGenero">Nombre Genero:</label>
+                            <input type="text" class="form-control" id="txtNombreGenero" name="txtNombreGenero" value="" />
+                        </p>
+                    </div>
+                </div>
+
+                <!--Footer-->
+                <div class="modal-footer justify-content-center">
+                    <button type="button" id="btnGuardarGenero" class="btn btn-blue">Guardar</button>
+                    <button type="button" class="btn btn-outline-blue waves-effect" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+            <!--/.Content-->
+        </div>
+    </div>
+    <!-- Central Modal Medium Success-->
+
+
+    <!-- Central Modal Medium Success -->
+    <div class="modal fade" id="modalArtistas" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-notify modal-success modal-lg" role="document">
+            <!--Content-->
+            <div class="modal-content">
+                <!--Header-->
+                <div class="modal-header blue">
+                    <p class="heading lead">Alta de Artistas Musicales</p>
+
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true" class="white-text">&times;</span>
+
+           </button>
+                </div>
+
+                <!--Body-->
+                <div class="modal-body">
+                    <div class="text-center">
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label for="txtArtista">Artista:</label>
+                                <input type="text" class="form-control" id="txtArtista" name="txtArtista" value="" />
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="txtVocalista">Vocalista:</label>
+                                <input type="text" class="form-control" id="txtVocalista" name="txtVocalista" />
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="dropGeneroArt">Genero:</label>
+                                <select name="dropGeneroArt" id="dropGeneroArt" class="form-control">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Footer-->
+                <div class="modal-footer justify-content-center">
+                    <button type="button" id="btnGuardarArtista" class="btn btn-blue">Guardar</button>
+                    <button type="button" class="btn btn-outline-blue waves-effect" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+            <!--/.Content-->
+        </div>
+    </div>
+    <!-- Central Modal Medium Success-->
+
+
+
+    <!-- Central Modal Medium Success -->
+    <div class="modal fade" id="modalDiscos" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-notify modal-success modal-lg" role="document">
+            <!--Content-->
+            <div class="modal-content">
+                <!--Header-->
+                <div class="modal-header blue">
+                    <p class="heading lead">Alta de Discos Musicales</p>
+
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+           <span aria-hidden="true" class="white-text">&times;</span>
+
+       </button>
+                </div>
+
+                <!--Body-->
+                <div class="modal-body">
+                    <div class="text-center">
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label for="txtDisco">Nombre Disc:</label>
+                                <input type="text" class="form-control" id="txtDisco" name="txtDisco" value="" />
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="txtAnio">Año:</label>
+                                <input type="number" class="form-control" id="txtAnio" name="txtAnio" />
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="dropGeneroArt">Artista:</label>
+                                <select name="dropArtistaDisco" id="dropArtistaDisco" class="form-control">
+                            </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="txtUrlDisco">Url Disco:</label>
+                                <input type="text" class="form-control" id="txtUrlDisco" name="txtUrlDisco" value="" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Footer-->
+                <div class="modal-footer justify-content-center">
+                    <button type="button" id="btnGuardarDisco" class="btn btn-blue">Guardar</button>
+                    <button type="button" class="btn btn-outline-blue waves-effect" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+            <!--/.Content-->
+        </div>
+    </div>
+    <!-- Central Modal Medium Success-->
+
+
+    <script>
+        //cargar dropdowns
+        $(document).ready(function() {
+            cargaArtistas();
+        });
+        var cabezera = new Headers();
+        cabezera.append('Accept', 'application/json');
+        cabezera.append('Access-Control-Allow-Origin', '*');
+        var idclon = '';
+
+        $('#dropArtistas').on('click', verDiscosArtista);
+        $('#btnGeneros').on('click', verModalGenero);
+        $('#btnGuardarGenero').on('click', agregarGenero);
+        $('#btnArtistas').on('click', verModalArtista);
+        $('#btnGuardarArtista').on('click', agregarArtista);
+        $('#btnDiscos').on('click', verModalDiscos);
+        $('#btnGuardarDisco').on('click', agregarDisco);
+        $('#btnRegistrarCancion').on('click', agregarCancion);
+    </script>
+</body>
+
+</html>
